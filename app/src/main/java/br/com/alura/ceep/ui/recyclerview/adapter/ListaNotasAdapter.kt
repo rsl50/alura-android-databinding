@@ -2,12 +2,9 @@ package br.com.alura.ceep.ui.recyclerview.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
+import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
@@ -17,7 +14,6 @@ import br.com.alura.ceep.BR
 import br.com.alura.ceep.R
 import br.com.alura.ceep.model.Nota
 import br.com.alura.ceep.ui.extensions.carregaImagem
-import kotlinx.android.synthetic.main.item_nota.view.*
 
 class ListaNotasAdapter(
     private val context: Context,
@@ -41,10 +37,6 @@ class ListaNotasAdapter(
 
         private lateinit var nota: Nota
 
-        private val campoImagem: ImageView by lazy {
-            itemView.item_nota_imagem
-        }
-
         init {
             itemView.setOnClickListener {
                 if (::nota.isInitialized) {
@@ -58,7 +50,6 @@ class ListaNotasAdapter(
 
             // Fazendo o data binding (o pacote BR é criado pela biblioteca Data Binding)
             viewDataBinding.setVariable(BR.nota, nota)
-            campoImagem.carregaImagem(nota.imagemUrl)
         }
 
     }
@@ -73,4 +64,9 @@ object DiffCallback : DiffUtil.ItemCallback<Nota>() {
 
     override fun areContentsTheSame(oldItem: Nota, newItem: Nota) = oldItem == newItem
 
+}
+
+@BindingAdapter("carregaImagem")
+fun carregaImagemPorUrl(view: ImageView, url: String) {
+    view.carregaImagem(url)
 }
