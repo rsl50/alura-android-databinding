@@ -2,6 +2,7 @@ package br.com.alura.ceep.ui.recyclerview.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
@@ -41,10 +42,12 @@ class ListaNotasAdapter(
         private lateinit var nota: Nota
 
         init {
-            itemView.setOnClickListener {
-                if (::nota.isInitialized) {
-                    onItemClickListener(nota)
-                }
+            viewDataBinding.listener = this
+        }
+
+        fun clicaNaNota(view: View) {
+            if (::nota.isInitialized) {
+                onItemClickListener(nota)
             }
         }
 
