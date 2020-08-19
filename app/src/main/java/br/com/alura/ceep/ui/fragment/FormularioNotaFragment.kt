@@ -39,15 +39,6 @@ class FormularioNotaFragment : Fragment() {
         findNavController()
     }
     private lateinit var notaEncontrada: Nota
-    private var urlAtual: String = ""
-    
-    private val campoImagem: ImageView by lazy {
-        formulario_nota_imagem
-    }
-    private val fabAdicionaImagem: FloatingActionButton by lazy {
-        formulario_nota_fab_adiciona_imagem
-    }
-
     private lateinit var viewDataBinding: FormularioNotaBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +53,9 @@ class FormularioNotaFragment : Fragment() {
     ): View? {
 
         viewDataBinding = FormularioNotaBinding.inflate(inflater, container, false)
+        viewDataBinding.solicitaImagem = View.OnClickListener {
+            solicitaImagem()
+        }
 
         return viewDataBinding.root
     }
@@ -69,8 +63,6 @@ class FormularioNotaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         tentaBuscarNota()
-        configuraFab()
-        configuraCampoImagem()
     }
 
     private fun tentaBuscarNota() {
@@ -93,43 +85,16 @@ class FormularioNotaFragment : Fragment() {
 
     private fun temIdValido() = notaId != 0L
 
-    private fun configuraFab() {
-        fabAdicionaImagem.setOnClickListener {
-            solicitaImagem()
-        }
-    }
-
-    private fun configuraCampoImagem() {
-        configuraVisibilidadeDeComponentes()
-        campoImagem.setOnClickListener {
-            solicitaImagem()
-        }
-    }
-
     private fun solicitaImagem() {
-        CarregaImagemDialog().mostra(requireContext(), urlAtual) { urlNova ->
-            this.urlAtual = urlNova
-            configuraImagem()
-        }
-    }
-
-    private fun configuraVisibilidadeDeComponentes() {
-        if (urlAtual.isEmpty()) {
-            campoImagem.visibility = GONE
-            fabAdicionaImagem.show()
-        } else {
-            campoImagem.visibility = VISIBLE
-            fabAdicionaImagem.hide()
+        CarregaImagemDialog().mostra(requireContext(), this.notaEncontrada.imagemUrl) { urlNova ->
+            //Atualiza a Url para notificar a mudança da view no Data Binding permitindo o controle da visibilidade do FAB via data binding
+            this.notaEncontrada.imagemUrl = urlNova
+            viewDataBinding.nota = notaEncontrada
         }
     }
 
     private fun inicializaNota(notaEncontrada: Nota) {
         this.notaEncontrada = notaEncontrada
-        urlAtual = this.notaEncontrada.imagemUrl
-    }
-    private fun configuraImagem() {
-        configuraVisibilidadeDeComponentes()
-        campoImagem.carregaImagem(urlAtual)
     }
 
     private fun appBarParaEdicao() = ComponentesVisuais(appBar = AppBar(titulo = "Editando nota"))
@@ -144,21 +109,18 @@ class FormularioNotaFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == R.id.formulario_nota_menu_salva) {
             val notaCriada = criaNota()
-            salva(notaCriada)
+            notaCriada?.let { salva(notaCriada) }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun criaNota(): Nota {
-        val titulo = formulario_nota_titulo.text.toString()
-        val descricao = formulario_nota_descricao.text.toString()
-        val favorita = formulario_nota_favorita.isChecked
-        return notaEncontrada.copy(
-            titulo = titulo,
-            descricao = descricao,
-            favorita = favorita,
-            imagemUrl = urlAtual
-        )
+    private fun criaNota(): Nota? {
+
+        // Utiliza o conteúdo da nota enviada para o ViewDataBinding
+        // e cria uma cópia com novo Id
+        return viewDataBinding
+            .nota?.copy(
+            id = notaEncontrada.id)
     }
 
     private fun salva(notaNova: Nota) {
