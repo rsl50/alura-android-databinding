@@ -49,6 +49,9 @@ class FormularioNotaFragment : Fragment() {
     ): View? {
 
         viewDataBinding = FormularioNotaBinding.inflate(inflater, container, false)
+        // Esta property faz o Live Data funcionar pois associa o lifecycle a classe de formulario
+        // fazendo o databinding com conceito de lifecycle-aware
+        viewDataBinding.lifecycleOwner = this
         viewDataBinding.nota = notaData
         viewDataBinding.solicitaImagem = View.OnClickListener {
             solicitaImagem()
@@ -79,11 +82,11 @@ class FormularioNotaFragment : Fragment() {
     private fun temIdValido() = notaId != 0L
 
     private fun solicitaImagem() {
-        val urlAtual = this.notaData.imagemUrl.get() ?: ""
+        val urlAtual = this.notaData.imagemUrl.value ?: ""
 
         CarregaImagemDialog().mostra(requireContext(), urlAtual) { urlNova ->
             //Atualiza a Url para notificar a mudança da view no Data Binding permitindo o controle da visibilidade do FAB via data binding
-            this.notaData.imagemUrl.set(urlNova)
+            this.notaData.imagemUrl.postValue(urlNova)
         }
     }
 
