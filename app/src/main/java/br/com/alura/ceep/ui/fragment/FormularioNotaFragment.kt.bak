@@ -49,7 +49,7 @@ class FormularioNotaFragment : Fragment() {
     ): View? {
 
         viewDataBinding = FormularioNotaBinding.inflate(inflater, container, false)
-        viewDataBinding.nota = notaData
+        viewDataBinding.nota = NotaData()
         viewDataBinding.solicitaImagem = View.OnClickListener {
             solicitaImagem()
         }
