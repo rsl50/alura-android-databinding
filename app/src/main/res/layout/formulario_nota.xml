@@ -30,7 +30,7 @@
     
         <EditText
             android:id="@+id/formulario_nota_titulo"
-            android:text="@{nota.titulo}"
+            android:text="@={nota.titulo}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -48,7 +48,7 @@
     
         <CheckBox
             android:id="@+id/formulario_nota_favorita"
-            android:checked="@{nota.favorita}"
+            android:checked="@={nota.favorita}"
             style="?android:attr/starStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
     
         <EditText
             android:id="@+id/formulario_nota_descricao"
-            android:text="@{nota.descricao}"
+            android:text="@={nota.descricao}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
