@@ -1,6 +1,8 @@
 package br.com.alura.ceep.ui.databinding
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import br.com.alura.ceep.model.Nota
 
 class NotaData(
@@ -10,6 +12,9 @@ class NotaData(
     val favorita: MutableLiveData<Boolean> = MutableLiveData<Boolean>().also { it.value = nota.favorita },
     val imagemUrl: MutableLiveData<String> = MutableLiveData<String>().also { it.value = nota.imagemUrl }
 ) {
+    val temUrl: LiveData<Boolean> = Transformations.map(imagemUrl) { url ->
+        url.isNotEmpty()
+    }
 
     // Esta função que irá receber a nota e atualizar as propriedades observáveis
     // permitindo o data binding

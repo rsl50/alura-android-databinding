@@ -69,7 +69,7 @@ class ListaNotasAdapter(
         fun marcaComoDesativado(){
             registry.markState(Lifecycle.State.DESTROYED)
         }
-        
+
         override fun onClick(v: View?) {
             if (::nota.isInitialized) {
                 onItemClickListener(nota)

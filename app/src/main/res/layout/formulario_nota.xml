@@ -20,7 +20,7 @@
             android:id="@+id/formulario_nota_imagem"
             android:onClick="@{solicitaImagem}"
             app:carregaImagem="@{nota.imagemUrl}"
-            android:visibility="@{nota.imagemUrl.isEmpty() ? View.GONE : View.VISIBLE}"
+            android:visibility="@{nota.temUrl ? View.VISIBLE : View.GONE }"
             android:layout_width="0dp"
             android:layout_height="200dp"
             app:layout_constraintEnd_toEndOf="parent"
